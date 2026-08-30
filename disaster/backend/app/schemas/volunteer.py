@@ -1,16 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 
 class VolunteerBase(BaseModel):
     name: str
     email: str
-    phone: str
-    skills: str = "First Aid, Search & Rescue"
-    status: str = "AVAILABLE"
+    phone: Optional[str] = "+91 9876543210"
+    skills: Optional[str] = "First Aid, Rescue"
+    status: Optional[str] = "AVAILABLE"
     assigned_zone_id: Optional[str] = None
-    latitude: Optional[float] = 25.5941
-    longitude: Optional[float] = 85.1376
+    latitude: Optional[float] = 28.6139
+    longitude: Optional[float] = 77.2090
+    created_by_email: Optional[str] = "commander@ndma.gov.in"
 
 class VolunteerCreate(VolunteerBase):
     id: Optional[str] = None
@@ -24,9 +25,20 @@ class VolunteerUpdate(BaseModel):
     assigned_zone_id: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    requester_email: Optional[str] = None
+    requester_role: Optional[str] = None
 
-class VolunteerResponse(VolunteerBase):
+class VolunteerResponse(BaseModel):
     id: str
-    created_at: datetime
-    class Config:
-        from_attributes = True
+    name: str
+    email: str
+    phone: Optional[str] = "+91 9876543210"
+    skills: Optional[str] = "First Aid, Rescue"
+    status: Optional[str] = "AVAILABLE"
+    assigned_zone_id: Optional[str] = None
+    latitude: Optional[float] = 28.6139
+    longitude: Optional[float] = 77.2090
+    created_by_email: Optional[str] = "commander@ndma.gov.in"
+    created_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
