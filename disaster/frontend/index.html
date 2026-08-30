@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Disaster Operations Command Platform</title>
+    <!-- Instant Tailwind CSS & Leaflet CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      html, body, #root {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #020617;
+      }
+      .leaflet-container {
+        height: 100% !important;
+        width: 100% !important;
+        min-height: 480px;
+        background-color: #0f172a;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100">
+    <div id="root" class="h-full"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
