@@ -22,11 +22,9 @@ def ensure_user_table():
                     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
                 );
             """))
-            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS agency VARCHAR DEFAULT 'National Disaster Response Authority';"))
-            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR;"))
             conn.commit()
     except Exception as e:
-        print(f"[USER MIGRATION]: {e}")
+        print(f"[USER TABLE MIGRATION]: {e}")
 
 ensure_user_table()
 
@@ -34,8 +32,12 @@ ensure_user_table()
 def register(payload: UserRegister, db: Session = Depends(get_db)):
     ensure_user_table()
     email_clean = (payload.email or "").lower().strip()
-    if not email_clean:
-        raise HTTPException(status_code=400, detail="Email is required.")
+    if not email_clean or "@" not in email_clean:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+
+    password_clean = (payload.password or "").strip()
+    if not password_clean:
+        raise HTTPException(status_code=400, detail="Password is required.")
 
     existing = db.query(User).filter(User.email == email_clean).first()
     if existing:
@@ -44,7 +46,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     new_user = User(
         name=(payload.name or "Operations Officer").strip(),
         email=email_clean,
-        password=payload.password,
+        password=password_clean,
         role=(payload.role or "COMMANDER").upper(),
         agency=payload.agency or "National Disaster Response Authority",
         phone=payload.phone
